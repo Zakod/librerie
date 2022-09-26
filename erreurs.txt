@@ -1,0 +1,88 @@
+requeteTable ; la requête SELECT * FROM abonnes a rendu une liste vide. 2022-09-18 18:25:19.386745
+requeteTable ; la requête SELECT * FROM abonnes a rendu une liste vide. 2022-09-18 18:35:19.105679
+requeteTable ; la requête SELECT * FROM abonnes a rendu une liste vide. 2022-09-18 18:35:45.229684
+requeteTable ; la requête SELECT * FROM abonnes a rendu une liste vide. 2022-09-18 18:36:24.967336
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-18 18:36:24.969679
+requeteTable ; la requête SELECT * FROM abonnes a rendu une liste vide. 2022-09-18 18:36:32.511530
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-18 18:36:32.512452
+requeteTable ; la requête SELECT * FROM articles a rendu une liste vide. 2022-09-18 18:36:32.513344
+requeteTable ; la requête SELECT * FROM abonnes a rendu une liste vide. 2022-09-18 18:36:40.031471
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-18 18:36:40.032386
+requeteTable ; la requête SELECT * FROM articles a rendu une liste vide. 2022-09-18 18:36:40.033218
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-18 18:36:40.034190
+requeteTable ; la requête SELECT * FROM abonnes a rendu une liste vide. 2022-09-18 18:36:46.678816
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-18 18:36:46.679794
+requeteTable ; la requête SELECT * FROM articles a rendu une liste vide. 2022-09-18 18:36:46.680613
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-18 18:36:46.681487
+requeteTable ; la requête SELECT * FROM pdf a rendu une liste vide. 2022-09-18 18:36:46.682457
+examen ; pas d'abonné dont le pseudo soit Jean-Max 2022-09-18 18:51:15.626987
+requeteTable ; la requête SELECT * FROM abonnes a rendu une liste vide. 2022-09-18 19:01:29.108317
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-18 19:01:29.109318
+requeteTable ; la requête SELECT * FROM articles a rendu une liste vide. 2022-09-18 19:01:29.110127
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-18 19:01:29.111027
+requeteTable ; la requête SELECT * FROM pdf a rendu une liste vide. 2022-09-18 19:01:29.111836
+requeteTable ; la requête SELECT * FROM abonnes a rendu une liste vide. 2022-09-18 19:09:50.081240
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-18 19:09:50.087745
+requeteTable ; la requête SELECT * FROM articles a rendu une liste vide. 2022-09-18 19:09:50.088819
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-18 19:09:50.090024
+requeteTable ; la requête SELECT * FROM pdf a rendu une liste vide. 2022-09-18 19:09:50.091316
+voirMiniatures : impossible d'ouvrir le fichier html. 2022-09-19 15:50:59.571733
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:08:22.972812
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-19 17:08:23.005234
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:10:56.702820
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-19 17:10:56.705590
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:11:14.870191
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-19 17:11:14.877049
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:13:29.453729
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-19 17:13:29.456368
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:26:56.262088
+requeteTable ; la requête SELECT * FROM commentaires WHERE id > ? ORDER BY date_heure DESC a rendu une liste vide. 2022-09-19 17:26:56.290222
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:27:59.241685
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-19 17:27:59.248021
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:29:58.493978
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-19 17:29:58.501461
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:30:09.456320
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-19 17:30:09.462788
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:31:23.749433
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-19 17:31:23.755698
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:31:35.099142
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-19 17:31:35.106079
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-19 17:50:35.240957
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-19 17:50:35.285574
+supprimerHtmlSimple ; Rien dans articles qui ait comme id. 20 2022-09-21 09:16:46.381512
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-21 09:49:38.220813
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-21 09:51:03.158600
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-21 09:51:18.321918
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-21 10:06:58.501693
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-21 10:06:58.508029
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-21 10:13:52.422249
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-21 10:13:52.428624
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-21 10:14:17.342113
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-21 10:14:17.348580
+requeteTable ; la requête SELECT * FROM auteurs WHERE id > ? a rendu une liste vide. 2022-09-21 10:14:33.327658
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-21 10:14:33.334851
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-21 15:30:40.195048
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-21 15:30:40.206416
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-21 15:31:09.574383
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-21 15:31:09.580853
+rubrique2 : impossible d'ouvrir le fichier html. 2022-09-22 17:52:55.227373
+rubrique2 : impossible d'ouvrir le fichier html. 2022-09-22 17:53:08.011954
+rubrique2 : impossible d'ouvrir le fichier html. 2022-09-22 17:53:15.795340
+rubrique2 : impossible d'ouvrir le fichier html. 2022-09-22 17:54:02.295188
+rubrique2 : impossible d'ouvrir le fichier html. 2022-09-22 17:54:09.069000
+rubrique2 : impossible d'ouvrir le fichier html. 2022-09-22 17:55:14.616113
+rubrique2 : impossible d'ouvrir le fichier html. 2022-09-22 17:59:11.115325
+rubrique2 : impossible d'ouvrir le fichier html. 2022-09-22 18:02:17.496781
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-23 12:49:24.693703
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-23 12:49:24.716567
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-23 12:54:37.972874
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-23 12:54:37.979448
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-23 12:54:59.062549
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-23 12:54:59.069450
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-23 12:55:24.344722
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-23 12:55:24.351585
+requeteTable ; la requête SELECT * FROM auteurs a rendu une liste vide. 2022-09-23 12:58:11.250235
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-23 12:58:11.257057
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-23 12:58:40.111707
+requeteTable ; la requête SELECT * FROM commentaires a rendu une liste vide. 2022-09-23 16:32:25.037564
+requeteTable ; la requête SELECT * FROM commentaires WHERE id > ? ORDER BY date_heure DESC a rendu une liste vide. 2022-09-25 08:11:30.520556
