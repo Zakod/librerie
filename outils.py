@@ -11,7 +11,6 @@ def codeCaractere(chaine):
 def faireListe(victimes) :#[2, 5, [7-10]]
     victimes += ','
     victimes = victimes.replace(' ', '')
-    print(victimes)
     nb_plages = victimes.count(',')
     identifiants = []
     for p in range(nb_plages) :
@@ -37,7 +36,6 @@ def estDateTemps(chaine, temps = 'minute') :
         reg = '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}'
     elif temps == 'minute' :
         reg = '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}'
-    #reg = '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}'
     x = re.search(reg, chaine)
     if x :
         return x.group()
@@ -56,7 +54,6 @@ def chaine(liste) :
     for bout in liste :
         chaine += bout + ", "
     chaine = chaine[:len(chaine) - 2]
-    print("chaine = ", chaine)
     return chaine
 
 def sortirPremierMot(chaine) :
@@ -85,7 +82,6 @@ def dateHeureFrancaise(date_heure, mode = 'ammjh') :
     if mode == 'auto' :
         maintenant = str(datetime.now())
         annee_maintenant = maintenant[:4]
-        print("now = ", annee_maintenant, "année = ", annee)
         if annee == annee_maintenant :
             mode = 'mj'
         else : mode = 'amj'
@@ -160,7 +156,6 @@ def pseudoDispo(pseudo) :#on sort avec True si le pseudo est disponible
     disponible = True
     for p in pseudos :
         p = p[:len(p)-1]
-        print("p = ", p)
         if len(p) == len(pseudo) :
             disponible = testerToutesCasses(p, pseudo)
         else :
@@ -173,19 +168,16 @@ def pseudoValide(pseudo) :
     domaine_libre = minuscule + majuscule + ' -'
     valid = True
     for c in pseudo :
-        print(c)
         if c in domaine_libre :
             pass
         else :
             valid = False
             break
-        print(valid)
     return valid
 
 def lettreChiffre(mot, litterature = False) :
     minuscule = "abcdefghijklmnopqrstuvwxyzéèêëâäàîïôöùûüçœ"
     majuscule=minuscule.upper()
-    #print(majuscule) 
     chiffre ="0123456789"
     if litterature :
         signes = "'’°.,?!:€$;-(—)«» %*\n\r\t" + '"' + chr(8232)#»«
@@ -194,14 +186,11 @@ def lettreChiffre(mot, litterature = False) :
     domaine_libre = minuscule + majuscule + chiffre + signes
     valid = True
     for c in mot :
-        print(c)
         if c in domaine_libre :
             pass
         else :
             valid = False
-            print("refusé : ", c)
             break
-        print(valid)
     return valid
 
 def mailValide(mail) :
@@ -214,7 +203,6 @@ def mailValide(mail) :
         minuscule = "abcdefghijklmnopqrstuvwxyzéèêëâäàîïôöùûüç"
         majuscule=minuscule.upper()
         chiffre ="0123456789"
-        #signes = ""
         le_tout = minuscule + majuscule + chiffre + signes_mot_de_passe
         valid = True
         for c in avant :
@@ -247,42 +235,30 @@ def mmotDePasseAlea(signes):
     signe = signes[randrange(len(signes))]
     place_minuscule, place_majuscule = randrange(longueur), randrange(longueur - 1)
     place_signe, place_chiffre = randrange(longueur - 2), randrange(longueur - 3)
-    print("p.minus = ", place_minuscule, "p.majus = ", place_majuscule, "p.signe = ", place_signe, "p.chif = ", place_chiffre)
     
     dico_mp[place_minuscule] = minus
     if place_majuscule >= place_minuscule :
         place_majuscule = place_majuscule + 1
-    print("p.minus = ", place_minuscule, "p.majus = ", place_majuscule, "p.signe = ", place_signe, "p.chif = ", place_chiffre)    
     
     dico_mp[place_majuscule] = majus
     mini, maxi = min(place_minuscule, place_majuscule), max(place_minuscule, place_majuscule)
-    print("mini = ", mini, "maxi = ", maxi)
     
     if place_signe >= maxi : place_signe = place_signe + 1
     elif place_signe >= mini : place_signe = place_signe + 1
-    print("p.minus = ", place_minuscule, "p.majus = ", place_majuscule, "p.signe = ", place_signe, "p.chif = ", place_chiffre)
     dico_mp[place_signe] = signe
     minimini, maximaxi = min(place_signe, mini), max(place_signe, maxi)
-    #ps, mini, maxi
-    #mini, ps, maxi
-    #mini, maxi, ps
     if minimini == place_signe : milieu = mini
     elif maximaxi == place_signe : milieu = maxi
     else : milieu = place_signe
-    print("minimini = ", minimini, "milieu = ", milieu, "maximaxi = ", maximaxi)
     if place_chiffre >= maximaxi : place_chiffre = place_chiffre + 3
     elif place_chiffre >= milieu : place_chiffre = place_chiffre + 2
     elif place_chiffre >= minimini : place_chiffre = place_chiffre + 1
-    print("p.minus = ", place_minuscule, "p.majus = ", place_majuscule, "p.signe = ", place_signe, "p.chif = ", place_chiffre)
     dico_mp[place_chiffre] = chiffre
-    print("dico_mp = ", dico_mp) 
-    #for c in dico_mp :
     chaine = ""
     for i in range(longueur) :
         if i not in [place_minuscule, place_majuscule, place_signe, place_chiffre] :
             dico_mp[i] = le_tout[randrange(len(le_tout))]
         chaine += dico_mp[i]
-    print("dico_mp = ", dico_mp)
     return chaine
 
 def motDePasseAlea(signes):
@@ -320,16 +296,9 @@ def motDePasseAlea(signes):
     place_signe = randrange(longueur - 3)
     place_signe = places_disponibles[place_signe]
     dico_mp[place_signe] = signe
-    
-    print("p.minus = ", place_minuscule, "p.majus = ", place_majuscule, "p.chif = ", place_chiffre, "p.signe = ", place_signe)
-    print("dico_mp = ", dico_mp) 
     chaine = ""
     for i in range(longueur) :
         if i not in [place_minuscule, place_majuscule, place_signe, place_chiffre] :
             dico_mp[i] = le_tout[randrange(len(le_tout))]
         chaine += dico_mp[i]
-    print("dico_mp = ", dico_mp)
     return chaine
-
-
-
