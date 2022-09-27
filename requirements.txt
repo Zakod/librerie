@@ -1,2 +1,0 @@
-bottle==0.12
-Python==3.10
