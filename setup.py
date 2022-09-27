@@ -1,7 +1,5 @@
 from bottle import run, route, view, static_file, template, request, error, response, FormsDict
 from time import sleep
-#from outils import urliser, lettreChiffre, mailValide, motDePasseValide, pseudoValide, pseudoDispo, unMois, urlAlea, dateHeureFrancaise, tabul, chaine, sortirPremierMot, estDateTemps, faireListe, motDePasseAlea
-#import outils
 from outils import *
 import sqlite3#re se trouve dans outils
 from grammaire import GN, nom
@@ -1322,4 +1320,4 @@ title_pseudo = "50 caractères maxi, que des lettres, l'espace ou le tiret. Jean
 title_80 = "80 caractères maxi, lettres, chiffres et ponctuation"
 title_300 = "300 caractères maxi, lettres, chiffres et ponctuation"
 title_litterature = "lettres, chiffres et ponctuation seulement"
-run(host='0.0.0.0', port=8080)
+run(host='localhost', port=PORT)
