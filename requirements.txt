@@ -1,2 +1,2 @@
-python==3.10.1
+version_python="3.10.1"
 bottle==0.12.19
