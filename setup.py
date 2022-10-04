@@ -1,26 +1,31 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from bottle import run, route, view, static_file, template, request, error, response, FormsDict
 from time import sleep
 from outils import *
-import sqlite3#re se trouve dans outils
+import sqlite3
 from grammaire import GN, nom
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from os import remove, path, environ
+from hashlib import sha512
+from dotenv import load_dotenv
 
 def htmlMail(texte) :
     html = '<html>\n<body>\n<p>'
     for c in texte :
         if c == '\n' : html += '<br/>'
         else : html += c
-    html += '<a href="localhost:8080">vaste.programme.fr</a></p></body></html>'
+    html += '<a href="https://vaste-programme.osc-fr1.scalingo.io/">vaste.programme.fr</a></p></body></html>'
     return html
 
 def ecrireMail(msg, mail, objet) :
+    load_dotenv()
     smtp_adresse = 'mail56.lwspanel.com'
     smtp_port = 465
     email_adresse = 'contact@vaste-programme.fr'
-    #email_MP = 'quelle andouille je suis'
+    email_MP = environ.get('MOT_DE_PASSE_MAIL')
     message = MIMEMultipart("alternative")
     message["Subject"] = objet
     message["From"] = email_adresse
@@ -334,7 +339,7 @@ def formulaire(action, envoi, colonnes, titre = "", une_ligne = False, renseigne
             if creation :
                 bulle = 'title = "'  + title_pseudo + '" '
             else : bulle = ""
-        if renseigne :
+        if renseigne and champ[0] != 'mot de passe':
             valu = 'value = "' + champ[2] + '" '
         else :
             valu = ''
@@ -419,7 +424,7 @@ def baliseMenu(num_menu, base) :
     #else : balisage = ""
     for nom_choix, nom_choix_urlise in menu.items() :#              non - blogs
         #num_choix = 
-        if nom_choix in ['déconnexion', 'modifier mes données', 'publier un article', 'contact', 'abonnement', 'jeux', 'bibliothèque','accueil'] :
+        if nom_choix in ['déconnexion', 'modifier mes données', 'publier un article', 'désabonnement', 'contact', 'abonnement', 'jeux', 'bibliothèque','accueil'] :
             url = nom_choix_urlise
         elif nom_choix in ['librairie', 'école', 'vélo', 'informatix', 'politix', 'qui sommes-nous ?'] :
             num_menu_fils = str(noms_menus.index(nom_choix))
@@ -529,16 +534,14 @@ def htmlSimple(auteur, titre, chapeau, texte, radicande, id_article) :
     titre = titre.replace('\r\n', '')
     titre = titre.replace('\n', '')
     html = ""
-    #html = tabul(base) + "<div class = 'barre_titre'>"
-    #html += tabul(base + 1) + "<div>"
-    #html += tabul(base + 2) + "<p>" + "Par" + "</p>"
-    #html += tabul(base + 2) + "<p class = 'nom_auteur'>" + auteur + "</p>"
-    #html += tabul(base + 1) + "</div>"
-    #html += tabul(base) + "</div>" 
     html += tabul(base) + "<h1>" + titre + "</h1>"
     html += tabul(base) + "<p><strong>" + chapeau + "</strong></p>"
     html += tabul(base) + "<p>" + texte + "</p>"
     return html
+
+def hacher(mot) :
+    mot_encode = mot.encode()
+    return sha512(mot_encode).hexdigest()
 
 def examen(pseudo, mot_de_passe) :
     branche = sqlite3.connect('vasteprogramme.db')
@@ -546,16 +549,16 @@ def examen(pseudo, mot_de_passe) :
     try :
         req = "SELECT mot_de_passe FROM abonnes WHERE pseudo = ?"
         curseur.execute(req, (pseudo,))
-        abonnes = curseur.fetchone()
+        mot_de_passe_hache = curseur.fetchone()
     except : 
         succes =  False
     else :
-        if abonnes == None :
+        if mot_de_passe_hache == None :
             succes = False
             journalErreurs("examen ; pas d'abonné dont le pseudo soit " + pseudo)
         else :
             succes = False
-            if abonnes[0] == mot_de_passe :
+            if mot_de_passe_hache[0] == hacher(mot_de_passe) :
                 succes = True        
     curseur.close()
     branche.close()   
@@ -624,10 +627,10 @@ def sesame() :
         action_dans_table[nom] = 'suppression'
      
     if request.forms.connexion :# je viens d'envoyer le formulaire d'authentification
-        c = open("couleurs", 'a')
+        c = open("couleurs.text", 'a')
         pseudo = request.forms.pseudo
         mot_de_passe = request.forms.mot_de_passe
-        c.write(pseudo + " " + mot_de_passe + str(datetime.now()) + '\n')
+        c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
         c.close()
         sleep(1)
         if (pseudo == 'Jean-Max' and examen(pseudo, mot_de_passe)) :
@@ -698,15 +701,16 @@ def motDePasseOublie() :
         mail = request.forms.mail
         pseudo = request.forms.pseudo
         nouveau_mot_de_passe = motDePasseAlea("_-+*/=,%$€!?&@#°§")
-        miseAJour('abonnes', 'mot_de_passe', nouveau_mot_de_passe, 'pseudo', pseudo)
+        nouveau_mot_de_passe_hache = hacher(nouveau_mot_de_passe)
         objet = "Nouveau mot de passe"
         msg = "Bonjour " + pseudo + " ! Voici un nouveau mot de passe généré automatiquement, qui vous permettra de vous connecter à vaste-programme.fr : " + nouveau_mot_de_passe
         msg += "\nVous pouvez le copier-coller, ou le recopier au clavier, mais dans ce cas, attention aux accents, minuscule ou majuscule, etc."
         msg += "\nSi vous le souhaitez, vous pourrez ensuite le changer dans votre espace personnel."
-        #ecrireMail(msg, mail, objet)
-        #contenu = "Bonjour. Je viens de vous envoyer par mail un nouveau mot de passe généré automatiquement. Vous pourrez vous connecter avec. À bientôt."
-        contenu + "Un nouveau mot de passe a été généré automatiquement. Je ne peux pas encore vous l'envoyer par mail automatique, car je ne sais pas encore sécuriser la messagerie.</br>\n"
-        contenu += 'Je ferai donc manuellement cette démarche. Vous le recevrez de façon différée. Merci de votre compréhension.'
+        ecrireMail(msg, mail, objet)
+        miseAJour('abonnes', 'mot_de_passe', nouveau_mot_de_passe_hache, 'pseudo', pseudo)        
+        contenu = "Bonjour. Je viens de vous envoyer par mail un nouveau mot de passe généré automatiquement. Vous pourrez vous connecter avec. À bientôt."
+        #contenu = "Un nouveau mot de passe a été généré automatiquement. Je ne peux pas encore vous l'envoyer par mail automatique, car je ne sais pas encore sécuriser la messagerie.</br>\n"
+        #contenu += 'Je ferai donc manuellement cette démarche. Vous le recevrez de façon différée. Merci de votre compréhension.'
         formul = False
     if formul :
         contenu = '<h2>Indiquez vos pseudo et adresse mail pour recevoir un nouveau mot de passe automatique, que vous pourrez ensuite modifier à votre gré.</h2>'
@@ -747,6 +751,21 @@ def deconnexion() :
     response.delete_cookie("connecte")#, pseudo, max_age = unMois()
     return {"titre": titre, "title" : titre, "menu_principal":baliseMenu(6, 6),"menu" :"","qui":cestQui(),"contenu":"","pied_de_page":baliseMenu(7, 4)}
 
+@route('/desabonnement')
+@view("temple_hote.tpl")
+def desabonnement() :
+    titre = "désabonnement"
+    pseudo = request.get_cookie("connecte")
+    response.delete_cookie("connecte")
+    branche = sqlite3.connect('vasteprogramme.db')
+    curseur = branche.cursor()
+    req = "DELETE FROM abonnes WHERE pseudo = ?"
+    curseur.execute(req, (pseudo,))
+    branche.commit()
+    curseur.close()
+    branche.close()
+    return {"titre": titre, "title" : titre, "menu_principal":baliseMenu(6, 6),"menu" :"","qui":cestQui(),"contenu": "Revenez quand vous voulez, hein ?", "pied_de_page":baliseMenu(7, 4)}
+
 @route('/<tache:re:modifier_mes_donnees>')
 @route('/<tache:re:modifier_mes_donnees>', method = 'POST')
 @view("temple_hote.tpl")
@@ -765,10 +784,9 @@ def edition(tache) :
         req = "SELECT id FROM abonnes WHERE pseudo = ?"       
         curseur.execute(req, (ancien_pseudo,))
         id_abonne = curseur.fetchone()
-        print("id_abonne = ", str(id_abonne))
         if id_abonne != None :
             mise_a_jour = "UPDATE abonnes SET (pseudo, mail, mot_de_passe) = (?,?,?) WHERE id = ?"
-            donnees = (pseudo, mail, mot_de_passe, id_abonne[0])
+            donnees = (pseudo, mail, hacher(mot_de_passe), id_abonne[0])
             curseur.execute(mise_a_jour, donnees)
             branche.commit()
             if changement_pseudo :
@@ -822,8 +840,14 @@ def choix(tache) :
         curseur.execute(modif, donnees)
         branche.commit()
         message = "Votre article a été modifié.<br/>"
+        req = "SELECT auteur, radicande FROM articles WHERE id = ?"
+        curseur.execute(req, (id_article,))
+        auteur_radicande = curseur.fetchone()
+        auteur = auteur_radicande[0]
+        radicande = auteur_radicande[1]
         curseur.close()
         branche.close()
+        fichierHtmlSimple(auteur, titre, chapeau, texte, radicande, id_article)
         return {"title" : tititre, "titre" : tititre, "menu_principal" : baliseMenu(6, 6), "qui" : cestQui(), "menu" : "", "contenu" : message, "pied_de_page" : baliseMenu(7, 4)} 
 
     elif request.forms.publier : #post un article (2 ou 3ième passage)
@@ -859,11 +883,14 @@ def choix(tache) :
                             donnees = (auteur, titre, chapeau, texte, consignes, radicande, approbation, 0, 0, 0, "", str(datetime.now()))
                             curseur.execute(req, donnees)
                             id_article = curseur.lastrowid
-                            html = htmlSimple(auteur, titre, chapeau, texte, radicande, id_article)
-                            nom_fichier = "html/" + radicande + ".html"
-                            f = open(nom_fichier, "w")
-                            f.write(html + "\n")
-                            f.close()
+                            fichierHtmlSimple(auteur, titre, chapeau, texte, radicande, id_article)
+
+                            #html = htmlSimple(auteur, titre, chapeau, texte, radicande, id_article)
+                            #nom_fichier = "html/" + radicande + ".html"
+                            #f = open(nom_fichier, "w")
+                            #f.write(html + "\n")
+                            #f.close()
+
                             message = "<p>Merci pour votre texte !<br/>\nIl est posté dans " + nom_du_blog + ", \nsans mise en forme pour l'instant,\nmais ça ne saurait tarder.</p>"                          
                         branche.commit()#else :#journalErreurs("choix ; pas d'abonné dont le pseudo soit " + pseudo)                               
                         curseur.close()
@@ -933,10 +960,17 @@ def choix(tache) :
 
     return {"title" : tititre, "titre" : tititre, "menu_principal" : baliseMenu(6, 6), "qui" : cestQui(), "menu" : "", "contenu" : contenu, "pied_de_page" : baliseMenu(7, 4)}
         
+def fichierHtmlSimple(auteur, titre, chapeau, texte, radicande, id_article) :
+    html = htmlSimple(auteur, titre, chapeau, texte, radicande, id_article)
+    nom_fichier = "html/" + radicande + ".html"
+    f = open(nom_fichier, "w")
+    f.write(html + "\n")
+    f.close()
+
 @route("/abonnement", method = 'GET')
 @route("/abonnement", method = 'POST')
 @view("temple_hote.tpl")
-def nouveau() :
+def abonnement() :
     texte, message, contenu = "", "", ""
     titre = "Pour participer à vaste-programme.fr"
     url = "abonnement.html"
@@ -952,32 +986,32 @@ def nouveau() :
         pseudo = request.forms.pseudo
         mail = request.forms.mail
         mot_de_passe = request.forms.mot_de_passe
-        valid = pseudoValide(pseudo)
-        if valid :
-            dispo = pseudoDispo(pseudo)
-            if dispo :
+        mot_de_passe_hache = hacher(mot_de_passe)
+        if pseudoValide(pseudo) :
+            if pseudoDispo(pseudo) :
                 #if mailValide(mail) :
                 if True :
                     if motDePasseValide(mot_de_passe, signes_mot_de_passe) :
+                        objet = 'Bienvenue'
+                        msg = ''' Bienvenue sur vaste-programme.fr qui devient grâce à vous un peu plus vaste !\n
+                                Vous vous êtes abonné(e) avec les données personnelles suivantes :\n
+                                nom d'utilisateur : ''' + pseudo + '\nadresse mail :' + mail + '\nMot de passe : ' + mot_de_passe + '\n'
+                        ecrireMail(msg, mail, objet)
                         branche = sqlite3.connect('vasteprogramme.db')
                         curseur = branche.cursor()
                         req = "INSERT INTO abonnes (pseudo, mail, statut, note, vues, articles, adresse_ip, mot_de_passe, date_abonnement) VALUES (?,?,?,?,?,?,?,?,?)"
-                        donnees = (pseudo, mail, 'L', 0, 0, 0, "", mot_de_passe, str(datetime.now()))
+                        donnees = (pseudo, mail, 'L', 0, 0, 0, "", mot_de_passe_hache, str(datetime.now()))
                         curseur.execute(req, donnees)
                         branche.commit()
                         curseur.close()
                         branche.close()
                         echec = False
                         contenu =  '<p class = "bienvenue">Merci et bienvenue à Vaste-programme.fr !</br>\n'
-                        #contenu += 'Je viens de vous envoyer un mail pour récapituler vos données personnelles, adresse mail, pseudo, mot de passe.\n</br>'
-                        contenu += 'Je ne peux pas encore vous envoyer de mail de contrôle, récapitulant vos données personnelles, car je ne sais pas encore sécuriser la messagerie.</br>\n'
-                        contenu += 'Je ferai donc manuellement cette démarche. Vous recevrez ce mail de façon différée.'
+                        contenu += 'Je viens de vous envoyer un mail pour récapituler vos données personnelles, adresse mail, pseudo, mot de passe.\n</br>'
+                        #contenu += 'Je ne peux pas encore vous envoyer de mail de contrôle, récapitulant vos données personnelles, car je ne sais pas encore sécuriser la messagerie.</br>\n'
+                        #contenu += 'Je ferai donc manuellement cette démarche. Vous recevrez ce mail de façon différée.'
                         contenu += '</p>'
-                        objet = 'Bienvenue'
-                        msg = ''' Bienvenue sur vaste-programme.fr qui devient grâce à vous un peu plus vaste !\n
-                                Vous vous êtes abonné(e) avec les données personnelles suivantes :\n
-                                nom d'utilisateur : ''' + pseudo + '\nadresse mail :' + mail + '\nMot de passe : ' + mot_de_passe + '\n'
-                        #ecrireMail(msg, mail, objet)
+                        
                         p = open('pseudos.txt', 'a') 
                         p.write(pseudo + '\n')
                         p.close()
@@ -1315,7 +1349,7 @@ corpus_menus = [['lire et faire lire', 'au phil des livres'],
                     ['qui es-tu ?', 'les auteurs'],
                     ["librairie", "école", "vélo", "informatix", "politix", "qui sommes-nous ?"],
                     ['contact', 'abonnement', 'jeux', 'bibliothèque'],
-                    ['déconnexion','modifier mes données', 'publier un article']]
+                    ['déconnexion','modifier mes données', 'publier un article','désabonnement']]
 menus = {}
 for m in range(len(noms_menus)) :
     menus[noms_menus[m]] = (titres_menus[m], corpus_menus[m])
@@ -1326,5 +1360,6 @@ title_pseudo = "50 caractères maxi, que des lettres, l'espace ou le tiret. Jean
 title_80 = "80 caractères maxi, lettres, chiffres et ponctuation"
 title_300 = "300 caractères maxi, lettres, chiffres et ponctuation"
 title_litterature = "lettres, chiffres et ponctuation seulement"
+
 #run(host='0.0.0.0', port=8080, debug = True, reloader = True)
 run(host='0.0.0.0', port=environ.get('PORT'))

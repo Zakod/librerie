@@ -36,6 +36,7 @@ def estDateTemps(chaine, temps = 'minute') :
         reg = '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}'
     elif temps == 'minute' :
         reg = '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}'
+    #reg = '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}'
     x = re.search(reg, chaine)
     if x :
         return x.group()
@@ -135,13 +136,12 @@ def urlAlea() :
         url += lettres[randrange(26)]
     return url
 
-def pseudoDispo(pseudo) :#on sort avec True si le pseudo est disponible
-    
+def pseudoDispo(pseudo) :#on sort avec True si le pseudo est disponible   
     def testerToutesCasses(p, pseudo) :#si on rencontre un caractères qui n'est pas pareil, on sort avec True
         pareil = True
         for i in range(len(p)) :
             pareil = (pseudo[i] in [p[i].upper(), p[i].lower()])
-            if pareil == False:
+            if not pareil :
                 break
         return not pareil
     
@@ -160,6 +160,8 @@ def pseudoDispo(pseudo) :#on sort avec True si le pseudo est disponible
             disponible = testerToutesCasses(p, pseudo)
         else :
             disponible = True
+        if not disponible :
+            break
     return disponible
  
 def pseudoValide(pseudo) :
@@ -203,6 +205,7 @@ def mailValide(mail) :
         minuscule = "abcdefghijklmnopqrstuvwxyzéèêëâäàîïôöùûüç"
         majuscule=minuscule.upper()
         chiffre ="0123456789"
+        #signes = ""
         le_tout = minuscule + majuscule + chiffre + signes_mot_de_passe
         valid = True
         for c in avant :
@@ -296,6 +299,7 @@ def motDePasseAlea(signes):
     place_signe = randrange(longueur - 3)
     place_signe = places_disponibles[place_signe]
     dico_mp[place_signe] = signe
+    
     chaine = ""
     for i in range(longueur) :
         if i not in [place_minuscule, place_majuscule, place_signe, place_chiffre] :
