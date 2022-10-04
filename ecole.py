@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python 3.10.1
 # -*- coding: utf-8 -*-
 from bottle import run, route, view, static_file, template, request, error, response, FormsDict
 from time import sleep
