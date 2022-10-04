@@ -1,1 +1,2 @@
 dotenv==0.21.0
+python_version = "3.10"
