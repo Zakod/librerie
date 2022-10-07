@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from os import remove, path, environ
 from hashlib import sha512
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 def htmlMail(texte) :
     html = '<html>\n<body>\n<p>'
@@ -21,11 +21,12 @@ def htmlMail(texte) :
     return html
 
 def ecrireMail(msg, mail, objet) :
-    load_dotenv()
+    #load_dotenv()
     smtp_adresse = 'mail56.lwspanel.com'
     smtp_port = 465
     email_adresse = 'contact@vaste-programme.fr'
-    email_MP = environ.get('MOT_DE_PASSE_MAIL')
+    #email_MP = environ.get('MOT_DE_PASSE_MAIL')
+    email_MP = getenv('MOT_DE_PASSE_MAIL')
     message = MIMEMultipart("alternative")
     message["Subject"] = objet
     message["From"] = email_adresse
