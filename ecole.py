@@ -8,7 +8,7 @@ from grammaire import GN, nom
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from os import remove, path, environ
+from os import remove, path, environ, getenv
 from hashlib import sha512
 #from dotenv import load_dotenv
 
