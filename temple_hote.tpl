@@ -1,8 +1,7 @@
 <!DOCTYPE HTML>
 <HTML>
     <HEAD>
-        <Meta CHARSET="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <META CHARSET="UTF-8" />
         <link rel="stylesheet" href='static/css/style_article.css' />
         <link rel = "icon" href="static/img/favicon.jpg">
         <TITLE>{{!title}}</TITLE>
@@ -19,10 +18,9 @@
                         {{!menu}}
                     </nav>
                 </div>
-                <div id = "profil">
-                   <img  src = "static/img/Arcimboldo_petit.jpg" width = 60 height = 60 alt = "3/4 face"/>
+                <nav id = "profil">
                    {{!qui}}
-                </div>
+                </nav>
             </div>
             
         </header> 

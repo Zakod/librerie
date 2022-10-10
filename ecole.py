@@ -1,4 +1,4 @@
-#!/usr/bin/env python 3.10.1
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from bottle import run, route, view, static_file, template, request, error, response, FormsDict
 from time import sleep
@@ -17,7 +17,7 @@ def htmlMail(texte) :
     for c in texte :
         if c == '\n' : html += '<br/>'
         else : html += c
-    html += '<a href="https://vaste-programme.osc-fr1.scalingo.io/">vaste.programme.fr</a></p></body></html>'
+    html += '<a href="www.vaste-programme/">vaste-programme.fr</a></p></body></html>'
     return html
 
 def ecrireMail(msg, mail, objet) :
@@ -27,6 +27,7 @@ def ecrireMail(msg, mail, objet) :
     email_adresse = 'contact@vaste-programme.fr'
     #email_MP = environ.get('MOT_DE_PASSE_MAIL')
     email_MP = getenv('MOT_DE_PASSE_MAIL')
+    print("email_MP = ", email_MP)
     message = MIMEMultipart("alternative")
     message["Subject"] = objet
     message["From"] = email_adresse
@@ -71,7 +72,7 @@ def voirMiniatures(radicande):
         photos.append(html)
     return photos
 
-def cestQui() :
+def ccestQui() :
     qui = request.get_cookie("connecte")
     if qui :
         url = "espace_personnel"
@@ -80,6 +81,20 @@ def cestQui() :
         qui = "connexion"
     lien = '<a href = ' + url + '>' + qui + '</a>'
     return  lien
+
+def cestQui() :
+    qui = request.get_cookie("connecte")
+    if qui :
+        url = "espace_personnel"
+    else :
+        url = "connexion"        
+        qui = "connexion"
+    profil = '<a href = ' + url + '>'
+    profil += tabul(5) + '<img src = "static/img/Arcimboldo_petit.jpg" width = 60 height = 60 alt = "3/4 face"/>'
+    profil += tabul(6) + '<p>' + qui + '</p>'
+    profil += tabul(5) + '</a>'
+    return  profil
+
 
 def cleDeValeur(dico, valeur, indice) :#(titres_de_blogs[b], 'blog' + str(b), approbations[b]) 
     for k, info in dico.items() :
@@ -346,7 +361,7 @@ def formulaire(action, envoi, colonnes, titre = "", une_ligne = False, renseigne
             valu = ''
         ligne = tabul(base + 2) +'<label for="' + nom + '">' + champ[0] + '</label>'
         ligne += brek + tabul(base + 2) +'<input autocorrect = "off" type="' + typ_input + '" ' + bulle + ' name="' + nom + '" id="' + nom
-        ligne += '" size="' + champ[1] + '" maxlength="' + champ[1] + '" ' + valu + 'required /><br/>' + brek
+        ligne += 'maxlength="' + champ[1] + '" ' + valu + 'required /><br/>' + brek
         formulaire += ligne
     formulaire += tabul(base + 2) +'<input type="submit" name="' + envoi + '" value="' + valeur + '"/></div>'
     formulaire += tabul(base + 1) + '</div>'
@@ -397,10 +412,10 @@ def publication(action, envoi, auteur = "", titre = "", num_blog = -1, base  = 3
         les_consignes += tabul(base + 1) + '<textarea title = "' + title_300 + '" name="consignes" id="consignes" maxlength = "300" cols="80" rows="4" value = "' + value_consignes + '" /></textarea><br/>'
 
     l_auteur = tabul(base + 1) + "<label for='auteur'>Auteur de l'article</label><br/>"
-    l_auteur += tabul(base + 1) + "<input type = 'text' autocorrect = 'off' name='auteur' id='auteur' size='50' maxlength = '50' title = '" + title_pseudo + "' value = '" + auteur + "' " + ridonli + " required/><br/>"
+    l_auteur += tabul(base + 1) + "<input type = 'text' autocorrect = 'off' name='auteur' id='auteur' maxlength = '50' title = '" + title_pseudo + "' value = '" + auteur + "' " + ridonli + " required/><br/>"
     formulaire += l_auteur
     le_titre = tabul(base + 1) + "<label for='titre'>Titre de l'article</label><br/>"
-    le_titre += tabul(base + 1) + "<input type = 'text' autocorrect = 'off' name='titre' id='titre' size='80' maxlength = '80' title = '" + title_80 + "' value = '" + titre + "' " + ridonli + " required/><br/>"
+    le_titre += tabul(base + 1) + "<input type = 'text' autocorrect = 'off' name='titre' id='titre' maxlength = '80' title = '" + title_80 + "' value = '" + titre + "' " + ridonli + " required/><br/>"
     formulaire += le_titre
     le_chapeau = tabul(base + 1) + "<label for='chapeau'>Chapeau de l'article</label><br/>"
     le_chapeau += tabul(base + 1) + "<textarea title = '" + title_300 + "' name='chapeau' id='chapeau' maxlength = '300' cols='80' rows='4'/>"  + value_chapeau + "</textarea><br/>"
@@ -628,7 +643,7 @@ def sesame() :
         action_dans_table[nom] = 'suppression'
      
     if request.forms.connexion :# je viens d'envoyer le formulaire d'authentification
-        c = open("couleurs.text", 'a')
+        c = open("couleurs.txt", 'a')
         pseudo = request.forms.pseudo
         mot_de_passe = request.forms.mot_de_passe
         c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
@@ -701,20 +716,32 @@ def motDePasseOublie() :
     if request.forms.mot_de_passe_oublie :
         mail = request.forms.mail
         pseudo = request.forms.pseudo
-        nouveau_mot_de_passe = motDePasseAlea("_-+*/=,%$€!?&@#°§")
-        nouveau_mot_de_passe_hache = hacher(nouveau_mot_de_passe)
-        objet = "Nouveau mot de passe"
-        msg = "Bonjour " + pseudo + " ! Voici un nouveau mot de passe généré automatiquement, qui vous permettra de vous connecter à vaste-programme.fr : " + nouveau_mot_de_passe
-        msg += "\nVous pouvez le copier-coller, ou le recopier au clavier, mais dans ce cas, attention aux accents, minuscule ou majuscule, etc."
-        msg += "\nSi vous le souhaitez, vous pourrez ensuite le changer dans votre espace personnel."
-        ecrireMail(msg, mail, objet)
-        miseAJour('abonnes', 'mot_de_passe', nouveau_mot_de_passe_hache, 'pseudo', pseudo)        
-        contenu = "Bonjour. Je viens de vous envoyer par mail un nouveau mot de passe généré automatiquement. Vous pourrez vous connecter avec. À bientôt."
-        #contenu = "Un nouveau mot de passe a été généré automatiquement. Je ne peux pas encore vous l'envoyer par mail automatique, car je ne sais pas encore sécuriser la messagerie.</br>\n"
-        #contenu += 'Je ferai donc manuellement cette démarche. Vous le recevrez de façon différée. Merci de votre compréhension.'
-        formul = False
+        branche = sqlite3.connect('vasteprogramme.db')
+        curseur = branche.cursor()
+        req = "SELECT mail FROM abonnes WHERE pseudo = ?"
+        curseur.execute(req, (pseudo,))
+        adresse_mail = curseur.fetchone()
+        curseur.close()
+        branche.close()      
+        print("fetch ", adresse_mail)      
+        if adresse_mail != None :
+            if mail == adresse_mail[0] :
+                nouveau_mot_de_passe = motDePasseAlea("_-+*/=,%$€!?&@#°§")
+                nouveau_mot_de_passe_hache = hacher(nouveau_mot_de_passe)
+                objet = "Nouveau mot de passe"
+                msg = "Bonjour " + pseudo + " ! Voici un nouveau mot de passe généré automatiquement, qui vous permettra de vous connecter à vaste-programme.fr : " + nouveau_mot_de_passe
+                msg += "\nVous pouvez le copier-coller, ou le recopier au clavier, mais dans ce cas, attention aux accents, minuscule ou majuscule, etc."
+                msg += "\nSi vous le souhaitez, vous pourrez ensuite le changer dans votre espace personnel."
+                ecrireMail(msg, mail, objet)
+                miseAJour('abonnes', 'mot_de_passe', nouveau_mot_de_passe_hache, 'pseudo', pseudo)        
+                contenu = "Bonjour. Je viens de vous envoyer par mail un nouveau mot de passe généré automatiquement. Vous pourrez vous connecter avec. À bientôt."
+                formul = False
+            else :
+                contenu = "L'adresse mail et le pseudo ne correspondent pas. "
+        else :
+            contenu = "Pseudo inconnu. "
     if formul :
-        contenu = '<h2>Indiquez vos pseudo et adresse mail pour recevoir un nouveau mot de passe automatique, que vous pourrez ensuite modifier à votre gré.</h2>'
+        contenu += 'Indiquez vos pseudo et adresse mail pour recevoir un nouveau mot de passe automatique, que vous pourrez ensuite modifier à votre gré.'
         contenu += formulaire(action = "/mot_de_passe_oublie", envoi = 'mot_de_passe_oublie', colonnes = [("pseudo", "50"), ("mail", "50")])
     return {"title" : "", "titre" : "Attribution d'un nouveau mot de passe", "menu_principal" : baliseMenu(6, 6), "qui" : cestQui(), "menu" : "", "contenu" : contenu, "pied_de_page" : baliseMenu(7, 4)}
 
@@ -885,15 +912,8 @@ def choix(tache) :
                             curseur.execute(req, donnees)
                             id_article = curseur.lastrowid
                             fichierHtmlSimple(auteur, titre, chapeau, texte, radicande, id_article)
-
-                            #html = htmlSimple(auteur, titre, chapeau, texte, radicande, id_article)
-                            #nom_fichier = "html/" + radicande + ".html"
-                            #f = open(nom_fichier, "w")
-                            #f.write(html + "\n")
-                            #f.close()
-
                             message = "<p>Merci pour votre texte !<br/>\nIl est posté dans " + nom_du_blog + ", \nsans mise en forme pour l'instant,\nmais ça ne saurait tarder.</p>"                          
-                        branche.commit()#else :#journalErreurs("choix ; pas d'abonné dont le pseudo soit " + pseudo)                               
+                        branche.commit()                               
                         curseur.close()
                         branche.close()
                     else :
