@@ -2,7 +2,7 @@
 {
     a
     {
-    	margin:3px;
+    	margin:1rem;
     }
 }
 
@@ -38,10 +38,10 @@ a
 	background-color:black;
 	border:1px red solid;
 	font-size:1rem;
-	font-family:Arial,Verdana,Serif,"Comic Sans MS";
+	font-family:"Times New Roman",Georgia,Serif;
 	text-decoration:none;
-	padding:0.2rem;
-	margin:0px;
+	padding:1rem;
+	margin:0.2px;
 }
 
 article a
@@ -54,12 +54,13 @@ article a
 	font-family:"Times New Roman",Georgia,Serif;
 }
 
-.ligne_titre a
+.ligne_titre_article a
 {
-	padding:0.2rem;
-	margin:0;
+	padding:1rem;
+	margin:0.2rem;
 	border:1px blue solid;
 	background-color:grey;
+	font-family:"Times New Roman",Georgia,Serif;
 	color:black;
 }
 
@@ -78,16 +79,17 @@ article a
 	background-color:aqua;
 	border:1px red solid;
 	font-size:1rem;
-	font-family:Arial,"Comic Sans MS",Verdana, Serif;
+	font-family:"Times New Roman",Georgia,Serif;
 	text-align:center;
-	padding:0.2rem;
-	margin:0px;
+	padding:1rem;
+	margin:0.2px;
 }
 
 .barre_titre a
 {
 	color:black;
 	background-color:aqua;
+	font-family:"Times New Roman",Georgia,Serif;
 	border:1px red solid;
 	font-size:1rem;
 	text-decoration:none ;
@@ -95,22 +97,11 @@ article a
 	margin:0;
 }
 
-#profil a
-{
-	color:black;
-	background-color:aqua;
-	border:1px red solid;
-	font-size:1rem;
-	font-family: Times, Arial, Verdana;
-	text-decoration:none ;
-	padding:0;
-	margin:0;
-}	
-
 .bouton a
 {
 	font-size:1rem;
 	background-color:grey;
+	font-family:"Times New Roman",Georgia,Serif;
 	color: white;
 	border:1px blue solid;
 	padding:0.2;
@@ -151,7 +142,8 @@ article a
 {
 	display:flex;
 	justify-content:space-between;
-	margin:4px;
+	align-items:center;
+	margin:0.2rem;
 }
 .menus
 {
@@ -164,9 +156,8 @@ article a
 {
 	display:flex;
 	flex-wrap:wrap;
-	/*margin:4px;*/
-	/*justify-content:flex-end;*/
-	/*text-align:center;*/
+	align-items:center ;
+	
 }
 
 .pied_de_page
@@ -182,7 +173,7 @@ article a
 	display:flex;
 	flex-wrap:wrap;
 	/*margin:4px;*/
-	align-items:flex-start ;
+	align-items:center ;
 }
 
 .menu h1
@@ -190,10 +181,10 @@ article a
 	background-color:yellow;
 	border:1px red solid;
 	font-size:1rem;
-	font-family:Arial,"Comic Sans MS",Verdana,Serif;
+	font-family:"Times New Roman",Georgia,Serif;
 	text-align:center;
-	padding:0.2rem;
-	margin:0;
+	padding:1rem;
+	margin:0.2rem;
 }
 
 .menu_principal h1
@@ -201,20 +192,20 @@ article a
 	background-color:yellow;
 	border:1px red solid;
 	font-size:1rem;
-	font-family:Arial,Verdana,Serif,"Comic Sans MS";
+	font-family:"Times New Roman",Georgia,Serif;
 	text-align:center;
-	padding:0.2rem;
-	margin:0;
+	padding:1rem;
+	margin:0.2rem;
 }
 .pied_de_page h1
 {	color:black;
 	background-color:yellow;
 	border:1px red solid;
 	font-size:1rem;
-	font-family:Arial,Verdana,Serif,"Comic Sans MS";
+	font-family:"Times New Roman",Georgia,Serif;
 	text-align:center;
-	padding:0.2rem;
-	margin:0;
+	padding:1rem;
+	margin:0.2rem;
 }
 .barre_titre
 {
@@ -224,17 +215,35 @@ article a
 	margin:0;
 	
 }
-.ligne_sommaire
+@media only screen and (min-width:768px)
 {
-	display:flex;
-	flex-direction : row;
-	justify-content:space-between;
-	align-items: center;
-	margin:0;
-	background-color: grey;
-	border:1px black solid;
+	.ligne_sommaire
+	{
+		display:flex;
+		flex-direction : row;
+		/*flex-wrap: wrap;*/
+		justify-content:space-between;
+		align-items: center;
+		margin:0;
+		background-color: grey;
+		border:1px black solid;
+	}
 }
 
+@media only screen and (max-width:767px)
+{
+	.ligne_sommaire
+	{
+		display:flex;
+		flex-direction : column;
+		/*flex-wrap: wrap;*/
+		justify-content:flex-start;
+		align-items: center;
+		margin:0;
+		background-color: grey;
+		border:1px black solid;
+	}
+}
 .ligne_commentaire
 {
 	display:flex;
@@ -261,24 +270,25 @@ article a
 	background-color:aqua;
 	border:1px red solid;
 	font-size:1rem;
-	font-family:Arial,Verdana, Serif,"Comic Sans MS";
+	font-family:"Times New Roman",Georgia,Serif;
 	text-align:center;
-	padding:0.2rem;
-	margin:0px;
+	padding:1rem;
+	margin:0.2px;
 }
 
-.ligne_titre
+.ligne_titre, .ligne_titre_article
 {
 	display : flex;
 	flex-direction: row;
 	justify-content : flex-start;
 	align-items:center;
+	word-wrap:break-word;
 	color : white;
 	background-color: grey;
-	font-family:Arial,Verdana,"Comic Sans MS",Serif;
+	font-family:"Times New Roman",Georgia,Serif;
 	font-size:1rem;
-	padding:0;
-	margin-bottom:0.5rem;
+	padding:1rem;
+	margin:0.2rem;
 }
 
 .ligne_titre_miniature
@@ -297,7 +307,7 @@ article a
 	padding:0.2rem;
 	margin:0;
 	color:white;
-	font-family:Arial,Verdana,Serif,"Comic Sans MS";
+	font-family:"Times New Roman",Georgia,Serif;
 	font-size: 1rem;
 }
 
@@ -308,8 +318,7 @@ article a
 	color:black;
 	background-color:white;
 	border:1px red solid;
-	padding:0.2rem;
-	margin-left:0.2rem;
+	padding:1rem;
 	margin:0.2rem;
 }
 
@@ -318,7 +327,7 @@ article a
 	/*display:flex;
 	flex-direction : row;
 	justify-content: flex-start;*/
-	font-family:Arial,Verdana,Serif,"Comic Sans MS";
+	font-family:"Times New Roman",Georgia,Serif;
 	font-size: 1rem;
 	color:lime;
 	padding:0.2rem
@@ -328,10 +337,31 @@ article a
 {
 	display:flex;
 	flex-direction:column;
-	justify-content:center ;
+	justify-content:center;
 	align-items:center;
+	background-color: none;
+	border:1px red solid;
+
+}
+#profil a
+{
+	border:none;
+	padding:0;
+	margin:0;
+	background-color: none;
+	/*margin:auto;*/
 }
 
+#profil p
+{
+	color:black;
+	background-color:aqua;
+	font-size:0.8rem;
+	font-family:"Times New Roman",Georgia,Serif;
+	text-decoration:none ;
+	padding:0.2rem;
+	margin:0;
+}	
 .bienvenue
 {
 	background-color:yellow;
@@ -388,17 +418,19 @@ footer
 .saisie_samebotte form
 {
 	font-size:1rem;
+	font-family:"Times New Roman",Georgia,Serif;
 	display:flex;
 	flex-direction: row;
-	margin:0;
-	padding:0.2rem;
+	margin:0.2rem;
+	padding:1rem;
 }
 
 .saisie_samebotte p
 {
 	font-size:1rem;
-	margin:0;
-	padding:0.2rem;
+	font-family:"Times New Roman",Georgia,Serif;
+	margin:0.2rem;
+	padding:1rem;
 }
 
 
