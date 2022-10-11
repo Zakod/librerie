@@ -14,11 +14,11 @@
                 <nav class="menu_principal">
                    {{!menu_principal}}
                 </nav>
-                   <div id = "profil">
-                   <img  src = "static/img/Arcimboldo_petit.jpg" width = 60 height = 60 alt = "3/4 face"/>
-                   <a href = "connexion">{{!qui}}</a></div>
+                <nav id = "profil">
+                    {{!qui}}
+                </nav>
             </div>
-            <nav class="menu" >
+            <nav class="menu">
                 {{!menu}}
             </nav>
         </header> 
