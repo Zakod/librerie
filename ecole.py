@@ -676,7 +676,7 @@ def sesame() :
         #c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
         #c.close()
         sleep(1)
-        load_dotenv()
+        #load_dotenv()
         print("pseudo = ", pseudo, "mp = ")
         env1, env2 = getenv('PATRONUS'), getenv('MOT_DE_PASSE_PATRONUS')
         print('env1 = ', env1, "env2 = ", env2)
