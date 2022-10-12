@@ -360,8 +360,8 @@ def formulaire(action, envoi, colonnes, titre = "", une_ligne = False, renseigne
         else :
             valu = ''
         ligne = tabul(base + 2) +'<label for="' + nom + '">' + champ[0] + '</label>'
-        ligne += brek + tabul(base + 2) +'<input autocorrect = "off" type="' + typ_input + '" ' + bulle + ' name="' + nom + '" id="' + nom
-        ligne += 'maxlength="' + champ[1] + '" ' + valu + 'required /><br/>' + brek
+        ligne += brek + tabul(base + 2) +'<input autocorrect = "off" type="' + typ_input + '"' + bulle + ' name="' + nom + '" id="' + nom
+        ligne += '" maxlength="' + champ[1] + '" ' + valu + 'required /><br/>' + brek
         formulaire += ligne
     formulaire += tabul(base + 2) +'<input type="submit" name="' + envoi + '" value="' + valeur + '"/></div>'
     formulaire += tabul(base + 1) + '</div>'
@@ -608,6 +608,33 @@ def anonymiserCommentaires(id_article) :
     curseur.close()
     branche.close()
 
+def lireLesJournaux() :
+    presse = "PSEUDOS\n"
+    f = open('pseudos.txt', 'r')
+    l = f.readlines()
+    for p in l :
+        presse += p
+    f.close()
+    f = open('pseudos.txt', 'w')
+    f.close()
+    presse += "COULEURS\n"
+    f = open('couleurs.txt', 'r')
+    l += f.readlines()
+    for p in l :
+        presse += p
+    f.close()
+    f = open('couleurs.txt', 'w')
+    f.close()
+    presse += "ERREURS\n"
+    f = open('erreurs.txt', 'r')
+    l += f.readlines()
+    for p in l :
+        presse += p
+    f.close()
+    f = open('erreurs.txt', 'w')
+    f.close()
+    return presse
+
 @route("/sesam")
 @route("/sesam", method = 'POST')
 @view("sesam.tpl")
@@ -643,20 +670,24 @@ def sesame() :
         action_dans_table[nom] = 'suppression'
      
     if request.forms.connexion :# je viens d'envoyer le formulaire d'authentification
-        c = open("couleurs.txt", 'a')
+        #c = open("couleurs.txt", 'a')
         pseudo = request.forms.pseudo
         mot_de_passe = request.forms.mot_de_passe
-        c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
-        c.close()
+        #c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
+        #c.close()
         sleep(1)
-        if (pseudo == 'Jean-Max' and examen(pseudo, mot_de_passe)) :
+        load_dotenv()
+        print("pseudo = ", pseudo, "mp = ")
+        env1, env2 = getenv('PATRONUS'), getenv('MOT_DE_PASSE_PATRONUS')
+        print('env1 = ', env1, "env2 = ", env2)
+        if (pseudo == env1 and mot_de_passe == env2) :
             authentic = True
         else :
             authentic = False
 
     if authentic :#je suis authentifié et j'arrive sur la page du patron
         titre_page = ""
-        contenu = ""
+        contenu = lireLesJournaux()
         for i in range(len(nom_tables)) :
             table = urliser(nom_tables[i])
             if action_dans_table[nom_tables[i]] == 'recherche' :
@@ -683,6 +714,7 @@ def sesame() :
                 donnees = None
                 action_dans_table[nom_tables[i]] = None
             contenu += gestionTable(nom_tables[i], requete, donnees, requete_donnees, action_dans_table[nom_tables[i]])
+
         menu_pr_admin = menuPrincipalAdmin()
     else :
         titre_page = "Accès à la page du patron"      
@@ -758,7 +790,7 @@ def connexion() :
     titre = "Connexion avec le pseudo et le mot de passe (il faut être abonné)"
     pseudo = request.get_cookie("connecte")
     contenu = formulaire(action = "connexion", envoi = 'connexion', colonnes = [('pseudo', '50'), ('mot de passe', '50')])
-    contenu += tabul(base + 1) + "<a class = 'oubli' href = '/mot_de_passe_oublie'>Mot de passe oublié ?</a>"
+    contenu += tabul(base + 1) + "<p class = 'oubli'><a href = '/mot_de_passe_oublie'>Mot de passe oublié ?</a></p>"
     if request.forms.connexion :
         pseudo = request.forms.pseudo
         mot_de_passe = request.forms.mot_de_passe
@@ -1214,7 +1246,7 @@ def templeHote(page_blog) :
         bouton_zombie += tabul(base + 2) + "<a href = '" + route_supprimer + "'>Supprimer</a>"
         bouton_zombie += tabul(base + 1) + "</p>"
 
-    ligne_titre = "<div class = 'ligne_titre'>"
+    ligne_titre = "<div class = 'ligne_titre_article'>"
     ligne_titre += tabul(base + 1) + "<p>Article, par</p>"
     ligne_titre += tabul(base + 1) + "<div class = 'nom_auteur'>" + auteur + "</div>" + bouton_zombie + tabul(base) + "</div>"
     url = radicande + ".html"
