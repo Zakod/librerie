@@ -25,9 +25,7 @@ def ecrireMail(msg, mail, objet) :
     smtp_adresse = 'mail56.lwspanel.com'
     smtp_port = 465
     email_adresse = 'contact@vaste-programme.fr'
-    #email_MP = environ.get('MOT_DE_PASSE_MAIL')
     email_MP = getenv('MOT_DE_PASSE_MAIL')
-    print("email_MP = ", email_MP)
     message = MIMEMultipart("alternative")
     message["Subject"] = objet
     message["From"] = email_adresse
@@ -612,25 +610,25 @@ def lireLesJournaux() :
     presse = "PSEUDOS\n"
     f = open('pseudos.txt', 'r')
     l = f.readlines()
+    f.close()
     for p in l :
-        presse += p
-    f.close()
-    f = open('pseudos.txt', 'w')
-    f.close()
-    presse += "COULEURS\n"
+        presse += p  
+    #f = open('pseudos.txt', 'w')
+    #f.close()
+    presse += "\nCOULEURS\n"
     f = open('couleurs.txt', 'r')
-    l += f.readlines()
-    for p in l :
-        presse += p
+    l = f.readlines()
     f.close()
+    for p in l :
+        presse += p  
     f = open('couleurs.txt', 'w')
     f.close()
-    presse += "ERREURS\n"
+    presse += "\nERREURS\n"
     f = open('erreurs.txt', 'r')
-    l += f.readlines()
+    l = f.readlines()
+    f.close()
     for p in l :
         presse += p
-    f.close()
     f = open('erreurs.txt', 'w')
     f.close()
     return presse
@@ -675,11 +673,9 @@ def sesame() :
         mot_de_passe = request.forms.mot_de_passe
         #c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
         #c.close()
-        sleep(1)
+        sleep(5)
         #load_dotenv()
-        print("pseudo = ", pseudo, "mp = ")
         env1, env2 = getenv('PATRONUS'), getenv('MOT_DE_PASSE_PATRONUS')
-        print('env1 = ', env1, "env2 = ", env2)
         if (pseudo == env1 and mot_de_passe == env2) :
             authentic = True
         else :
@@ -755,7 +751,6 @@ def motDePasseOublie() :
         adresse_mail = curseur.fetchone()
         curseur.close()
         branche.close()      
-        print("fetch ", adresse_mail)      
         if adresse_mail != None :
             if mail == adresse_mail[0] :
                 nouveau_mot_de_passe = motDePasseAlea("_-+*/=,%$€!?&@#°§")
@@ -1045,6 +1040,7 @@ def abonnement() :
                 #if mailValide(mail) :
                 if True :
                     if motDePasseValide(mot_de_passe, signes_mot_de_passe) :
+                        mailDeControle(mail)
                         objet = 'Bienvenue'
                         msg = ''' Bienvenue sur vaste-programme.fr qui devient grâce à vous un peu plus vaste !\n
                                 Vous vous êtes abonné(e) avec les données personnelles suivantes :\n
@@ -1401,7 +1397,7 @@ corpus_menus = [['lire et faire lire', 'au phil des livres'],
                     ['la hune', 'festivalof', 'kloakozimondis'],
                     ['qui es-tu ?', 'les auteurs'],
                     ["librairie", "école", "vélo", "informatix", "politix", "qui sommes-nous ?"],
-                    ['contact', 'abonnement', 'jeux', 'bibliothèque'],
+                    ['contact', 'jeux', 'bibliothèque'],
                     ['déconnexion','modifier mes données', 'publier un article','désabonnement']]
 menus = {}
 for m in range(len(noms_menus)) :
