@@ -627,13 +627,15 @@ def sesame() :
         action_dans_table[nom] = 'suppression'
      
     if request.forms.connexion :# je viens d'envoyer le formulaire d'authentification
-        c = open("couleurs.txt", 'a')
+        #c = open("couleurs.txt", 'a')
         pseudo = request.forms.pseudo
         mot_de_passe = request.forms.mot_de_passe
-        c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
-        c.close()
-        sleep(1)
-        if (pseudo == 'Jean-Max' and examen(pseudo, mot_de_passe)) :
+        #c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
+        #c.close()
+        sleep(5)
+        #load_dotenv()
+        env1, env2 = getenv('PATRONUS'), getenv('MOT_DE_PASSE_PATRONUS')
+        if (pseudo == env1 and mot_de_passe == env2) :
             authentic = True
         else :
             authentic = False
