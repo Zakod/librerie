@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from os import remove, path, environ, getenv
 from hashlib import sha512
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 def htmlMail(texte) :
     html = '<html>\n<body>\n<p>'
@@ -21,7 +21,7 @@ def htmlMail(texte) :
     return html
 
 def ecrireMail(msg, mail, objet) :
-    #load_dotenv()
+    load_dotenv()
     smtp_adresse = 'mail56.lwspanel.com'
     smtp_port = 465
     email_adresse = 'contact@vaste-programme.fr'
@@ -71,7 +71,8 @@ def voirMiniatures(radicande):
     return photos
 
 def cestQui() :
-    qui = request.get_cookie("connecte")
+    #qui = request.get_cookie("connecte")
+    qui = None
     if qui :
         url = "espace_personnel"
     else :
@@ -625,22 +626,22 @@ def sesame() :
         victimes = request.forms.victime
         identifiants = faireListe(victimes)
         action_dans_table[nom] = 'suppression'
-     
-    if request.forms.connexion :# je viens d'envoyer le formulaire d'authentification
-        #c = open("couleurs.txt", 'a')
+
+    if request.forms.connexion :
+        c = open("couleurs.txt", 'a')
         pseudo = request.forms.pseudo
         mot_de_passe = request.forms.mot_de_passe
-        #c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
-        #c.close()
+        c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
+        c.close()
         sleep(5)
-        #load_dotenv()
+        load_dotenv()
         env1, env2 = getenv('PATRONUS'), getenv('MOT_DE_PASSE_PATRONUS')
         if (pseudo == env1 and mot_de_passe == env2) :
             authentic = True
         else :
             authentic = False
 
-    if authentic :#je suis authentifié et j'arrive sur la page du patron
+    if authentic :
         titre_page = ""
         contenu = ""
         for i in range(len(nom_tables)) :
@@ -870,7 +871,8 @@ def jeux() :
 def bibliotheque() :
     titre = "Livres petits et grands au format PDF"
     ajout_livre = ""
-    pseudo = request.get_cookie("connecte")
+    #pseudo = request.get_cookie("connecte")
+    pseudo = ""
     if pseudo == 'Jean-Max' :
         ajout_livre = formulaire(action = "bibliotheque", envoi = 'envoi_pdf', colonnes = [('titre', '50'), ('auteur', '50')], titre = 'Ajouter un livre') + '<br/>'
 
@@ -939,7 +941,8 @@ def pageBlog(seize_blogs):
     for mot in menus[noms_menus[maman]][1] :
         menu[mot] = urliser(mot)
     pseudo = request.get_cookie("connecte")
-    acces_libre = pseudo and (pseudo == 'Jean-Max' or numero == '12' or numero == '14')
+    #acces_libre = pseudo and (pseudo == 'Jean-Max' or numero == '12' or numero == '14')
+    acces_libre = False
     if acces_libre :
         route = '/publier_un_article§' + numero
         bouton_zombie = tabul(base + 1) + "<a href = '" + route + "'>Publier un article</a>"#class = 'bouton'
@@ -992,7 +995,8 @@ def templeHote(page_blog) :
     if sterling == -1 :
         sterling = parag
     maman = int(page_blog[sterling + 1 :diese])
-    pseudo = request.get_cookie("connecte")
+    #pseudo = request.get_cookie("connecte")
+    pseudo  = ""
     bouton_zombie = ""
     if pseudo == auteur :   
         route_modifier = 'modifier_un_article£' + radicande + '§' + str(id_article)
@@ -1014,7 +1018,8 @@ def templeHote(page_blog) :
         article = "Impossible d'ouvrir le fichier html."
         journalErreurs("templeHote : impossible d'ouvrir le fichier html.")
     route_envoi = page_blog #+ radicande + '§' + str(id_article)
-    qui = request.get_cookie("connecte")
+    #qui = request.get_cookie("connecte")
+    qui = None
     incrementCompteur(table = 'articles', colonne = 'vues', identifiant = id_article)
     message, liste, saisie_commentaire = "", "", ""
     if qui :
@@ -1170,5 +1175,5 @@ title_80 = "80 caractères maxi, lettres, chiffres et ponctuation"
 title_300 = "300 caractères maxi, lettres, chiffres et ponctuation"
 title_litterature = "lettres, chiffres et ponctuation seulement"
 
-#run(host='0.0.0.0', port=8080, debug = True, reloader = True)
-run(host='0.0.0.0', port=environ.get('PORT'))
+run(host='0.0.0.0', port=8080, debug = True, reloader = True)
+#run(host='0.0.0.0', port=environ.get('PORT'))
