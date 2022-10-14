@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from os import remove, path, environ, getenv
 from hashlib import sha512
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 def htmlMail(texte) :
     html = '<html>\n<body>\n<p>'
@@ -21,7 +21,7 @@ def htmlMail(texte) :
     return html
 
 def ecrireMail(msg, mail, objet) :
-    load_dotenv()
+    #load_dotenv()
     smtp_adresse = 'mail56.lwspanel.com'
     smtp_port = 465
     email_adresse = 'contact@vaste-programme.fr'
@@ -634,7 +634,7 @@ def sesame() :
         c.write(pseudo + " " + hacher(mot_de_passe) + " " + str(datetime.now()) + '\n')
         c.close()
         sleep(5)
-        load_dotenv()
+        #load_dotenv()
         env1, env2 = getenv('PATRONUS'), getenv('MOT_DE_PASSE_PATRONUS')
         if (pseudo == env1 and mot_de_passe == env2) :
             authentic = True
@@ -1175,5 +1175,5 @@ title_80 = "80 caractères maxi, lettres, chiffres et ponctuation"
 title_300 = "300 caractères maxi, lettres, chiffres et ponctuation"
 title_litterature = "lettres, chiffres et ponctuation seulement"
 
-run(host='0.0.0.0', port=8080, debug = True, reloader = True)
-#run(host='0.0.0.0', port=environ.get('PORT'))
+#run(host='0.0.0.0', port=8080, debug = True, reloader = True)
+run(host='0.0.0.0', port=environ.get('PORT'))
