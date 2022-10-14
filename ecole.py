@@ -593,6 +593,33 @@ def anonymiserCommentaires(id_article) :
     curseur.close()
     branche.close()
 
+def lireLesJournaux() :
+    presse = "PSEUDOS\n"
+    f = open('pseudos.txt', 'r')
+    l = f.readlines()
+    f.close()
+    for p in l :
+        presse += p  
+    #f = open('pseudos.txt', 'w')
+    #f.close()
+    presse += "\nCOULEURS\n"
+    f = open('couleurs.txt', 'r')
+    l = f.readlines()
+    f.close()
+    for p in l :
+        presse += p  
+    f = open('couleurs.txt', 'w')
+    f.close()
+    presse += "\nERREURS\n"
+    f = open('erreurs.txt', 'r')
+    l = f.readlines()
+    f.close()
+    for p in l :
+        presse += p
+    f = open('erreurs.txt', 'w')
+    f.close()
+    return presse
+
 @route("/sesam")
 @route("/sesam", method = 'POST')
 @view("sesam.tpl")
@@ -643,7 +670,7 @@ def sesame() :
 
     if authentic :
         titre_page = ""
-        contenu = ""
+        contenu = contenu = lireLesJournaux()
         for i in range(len(nom_tables)) :
             table = urliser(nom_tables[i])
             if action_dans_table[nom_tables[i]] == 'recherche' :
@@ -695,139 +722,6 @@ def nouvelAuteur(identifiant) :
     branche.close()
     
 
-@route('/<tache:re:modifier_un_article£.{1,}§[0-9]{1,}>')
-@route('/<tache:re:modifier_un_article£.{1,}§[0-9]{1,}>', method = 'POST')
-@route('/<tache:re:supprimer_un_article§[0-9]{1,}>')
-@route('/<tache:re:publier_un_article§[0-9]{1,}|publier_un_article>')#si on arrive d'un blog (les 16 pour moi, festivalof ou qui-es-tu pour tous), § + num_blog
-@route('/<tache:re:publier_un_article§[0-9]{1,}|publier_un_article>', method = 'POST')#si on arrive de l'espace personnel, rien
-@view("temple_hote.tpl")
-def choix(tache) :
-    if request.forms.modifier :
-        tititre = "Modification d'un article"
-        titre = request.forms.titre
-        chapeau = request.forms.chapeau
-        texte = request.forms.texte
-        consignes = request.forms.consignes
-        id_article = request.forms.id_article
-        branche = sqlite3.connect('vasteprogramme.db')
-        curseur = branche.cursor()      
-        modif = "UPDATE articles SET (titre, chapeau, texte, consignes) = (?,?,?,?) WHERE id = ?"
-        donnees = (titre, chapeau, texte, consignes, id_article)#faut que publication le renvoie en hidden
-        curseur.execute(modif, donnees)
-        branche.commit()
-        message = "Votre article a été modifié.<br/>"
-        req = "SELECT auteur, radicande FROM articles WHERE id = ?"
-        curseur.execute(req, (id_article,))
-        auteur_radicande = curseur.fetchone()
-        auteur = auteur_radicande[0]
-        radicande = auteur_radicande[1]
-        curseur.close()
-        branche.close()
-        fichierHtmlSimple(auteur, titre, chapeau, texte, radicande, id_article)
-        return {"title" : tititre, "titre" : tititre, "menu_principal" : baliseMenu(6, 6), "qui" : cestQui(), "menu" : "", "contenu" : message, "pied_de_page" : baliseMenu(7, 4)} 
-
-    elif request.forms.publier : #post un article (2 ou 3ième passage)
-        tititre = "Publication d'un article"
-        numero_image = request.forms.miniature
-        approbation = request.forms.approbation
-        nom_du_blog = cleDeValeur(blogs, approbation, 2)
-        numero = noms_de_blogs.index(nom_du_blog)
-        titre = request.forms.titre#il était renseigné si patron
-        if lettreChiffre(titre, litterature = True) :
-            chapeau = request.forms.chapeau
-            if lettreChiffre(chapeau, litterature = True) :
-                texte = request.forms.texte
-                if lettreChiffre(texte, litterature = True) :
-                    consignes = request.forms.consignes
-                    if lettreChiffre(consignes, litterature = True) :
-                        auteur = request.forms.auteur
-                        branche = sqlite3.connect('vasteprogramme.db')
-                        curseur = branche.cursor()
-                        req = "INSERT into articles (auteur, titre, chapeau, texte, consignes, radicande, approbation, note, vues, commentaires, image, date_heure) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
-                        if auteur == 'Jean-Max' :
-                            radicande = urliser(titre)
-                            photos = voirMiniatures(radicande)
-                            if len(photos) > 0 :
-                                photo = photos[int(numero_image) - 1]
-                            else :
-                                photo = ""
-                            donnees = (auteur, titre, chapeau, "", "", radicande, approbation, 0, 0, 0, photo, str(datetime.now()))
-                            curseur.execute(req, donnees)
-                            message = "C'est en ligne !"
-                        else :
-                            radicande = urlAlea()
-                            donnees = (auteur, titre, chapeau, texte, consignes, radicande, approbation, 0, 0, 0, "", str(datetime.now()))
-                            curseur.execute(req, donnees)
-                            id_article = curseur.lastrowid
-                            fichierHtmlSimple(auteur, titre, chapeau, texte, radicande, id_article)
-                            message = "<p>Merci pour votre texte !<br/>\nIl est posté dans " + nom_du_blog + ", \nsans mise en forme pour l'instant,\nmais ça ne saurait tarder.</p>"                          
-                        branche.commit()                               
-                        curseur.close()
-                        branche.close()
-                    else :
-                        message = "<p Class = 'alerte'>" + title_300 + "</p>"
-                else :
-                    message = "<p Class = 'alerte'>" + title_litterature + "</p>"
-            else :
-                message = "<p Class = 'alerte'>" + title_300 + "</p>"
-        else :
-            message = "<p Class = 'alerte'>" + title_80 + "</p>"
-        return {"title" : tititre, "titre" : tititre, "menu_principal" : baliseMenu(6, 6), "qui" : cestQui(), "menu" : "", "contenu" : message, "pied_de_page" : baliseMenu(7, 4)}
-
-    elif request.forms.juste_titre :#donc c'est le patron, qui vient d'envoyer le titre, c'est le deuxième passage
-        contenu = "<h2>publier un article</h2>\n" 
-        juste_titre = request.forms.titre_de_larticle
-        contenu += publication(action = tache, envoi = 'publier', auteur = 'Jean-Max', titre = juste_titre)
-        return {"title" : "", "titre" : "", "menu_principal" : baliseMenu(6, 6), "qui" : cestQui(), "menu" : "", "contenu" : contenu, "pied_de_page" : baliseMenu(7, 4)} 
-
-    souligne = tache.find('_')
-    verbe = tache[:souligne]
-    if verbe == 'modifier' :
-        tititre = "Modification d'un article"
-        sterling = tache.find('£')
-        parag = tache.find('§')
-        radicande = tache[sterling+1 : parag]
-        id_article = int(tache[parag + 1:])
-        contenu = publication(action = tache, envoi = 'modifier', auteur = "", titre = "", id_article = id_article)
-
-    elif verbe == 'publier' :
-        tititre = "Publication d'un article"
-        pseudo = request.get_cookie("connecte")    
-        num_blog = ""
-        parag = tache.find('§')
-        if parag > -1 :#on poste à partir du blog
-            num_blog = int(tache[parag + 1 :])
-            vient_dun_blog = True
-        else :
-            vient_dun_blog = False       
-        patron = False
-        if pseudo == 'Jean-Max':#premier passage
-            patron = True
-            contenu = formulaire(action = tache, envoi = 'juste_titre', colonnes = [("titre de l'article", '80')], une_ligne = True)
-            return {"title" : "", "titre" : "Saisie du titre de votre article", "menu_principal" : baliseMenu(6, 6), "menu" : "", "qui" : cestQui(), "contenu" : contenu, "pied_de_page" : baliseMenu(7, 4)}
-        else :#c'est un quidam, premier passage
-            if vient_dun_blog :
-                contenu = publication(action = tache, envoi = 'publier', auteur = pseudo, num_blog = num_blog)
-            else :
-                contenu = publication(action = tache, envoi = 'publier', auteur = pseudo)
-
-    elif verbe == 'supprimer' :
-        tititre = "Suppression d'un article"
-        parag = tache.find('§')
-        id_article = int(tache[parag + 1:])
-        branche = sqlite3.connect('vasteprogramme.db')
-        curseur = branche.cursor()
-        req = "DELETE FROM articles WHERE id = ?"
-        supprimerHtmlSimple(id_article)
-        anonymiserCommentaires(id_article)
-        donnees = (id_article,)
-        curseur.execute(req, donnees)
-        branche.commit()
-        curseur.close()
-        branche.close()      
-        contenu = "L'article a été supprimé."
-
-    return {"title" : tititre, "titre" : tititre, "menu_principal" : baliseMenu(6, 6), "qui" : cestQui(), "menu" : "", "contenu" : contenu, "pied_de_page" : baliseMenu(7, 4)}
         
 def fichierHtmlSimple(auteur, titre, chapeau, texte, radicande, id_article) :
     html = htmlSimple(auteur, titre, chapeau, texte, radicande, id_article)
